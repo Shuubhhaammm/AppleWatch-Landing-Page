@@ -13,6 +13,14 @@ app.get("/",(req,res) => {
     console.log("GET REQUEST AT HOME");
 })
 
+function checkAuthToken(req,res,next){
+    const authToken = req.headers.authorization;
+    if(authToken){
+        return res.redirect("/");
+    }
+    next();
+}
+
 app.post("/api/contact-us",async(req,res) => {
     try {
         const {name,email,query_message,contact_number} = await req.body;
@@ -33,7 +41,7 @@ app.post("/api/contact-us",async(req,res) => {
     }
 })
 
-app.post("/api/register",async(req,res) => {
+app.post("/api/register",checkAuthToken,async(req,res) => {
     try {
         const {name,email,password} = await req.body;
         console.log("Register request for :" , {name,email});
@@ -53,7 +61,7 @@ app.post("/api/register",async(req,res) => {
     }
 })
 
-app.post("/api/check-credentials",async(req,res) => {
+app.post("/api/check-credentials",checkAuthToken,async(req,res) => {
     const {email,password} = await req.body;
     console.log("Login Request: ",{email,password});
     const existingUser = await NewUserSchema.findOne({email:email});
