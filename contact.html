@@ -1,74 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="contact_styles.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="contact_styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Contact Us</title>
-  </head>
-  <body>
-    <div class="container">
-      <form
-        action="#"
-        method="post"
-        class="contact-form"
-        onsubmit="return validateForm(event)"
-      >
-        <h2>Contact Us</h2>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
+</head>
+<body>
+    <div class="newsletter-holder">
+        
+        <div class="newsletter w-full flex flex-wrap justify-around items-center">
+    
+         <div class="greeting w-[45%]">
+             <h1 class="text-[35px]">Contact Us</h1>
+             <p class="text-[50px]"><b>Have questions?<br>Shoot us an email.</b></p>
+             <br>
+             <p class="text-[18px]"><b>Have a question for us or feedback? Please click 
+                 on the most appropriate category amd fill out the form to reach us.</b></p>
+         </div>
+             
+         <div class="details w-[45%]">
+             <form id="contact" action="" onsubmit="event.preventDefault();validateForm()">
+                 <fieldset>
+                     <input id="name" placeholder="Your name" type="text" tabindex="1" required autofocus>
+                   </fieldset>
+    
+                   <fieldset>
+                     <input id="email" placeholder="Your Email Address" type="email" tabindex="2" required>
+                   </fieldset>
+    
+                   <fieldset>
+                     <input id="number" placeholder="Your Phone Number" type="tel" tabindex="3" required>
+                   </fieldset>
+                   
+                   <fieldset>
+                     <textarea id="query" placeholder="Type your Message Here...." tabindex="5" required></textarea>
+                   </fieldset>
+    
+                   <fieldset>
+    
+                     <button name="submit" type="submit" id="contact-submit" data-submit="...Sending" >Submit</button>
+                   </fieldset>
+             </form>                                        
+         </div>
+         </div>
+    
+     </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+     <script>
+        async function validateForm() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var query_message = document.getElementById("query").value;
+        var contact_number = document.getElementById("number").value;
 
-        <label for="query">Query Message:</label>
-        <textarea id="query" name="query" rows="4" required></textarea>
+        alert(
+          "Information received: " +
+            "\nName: " +
+            name +
+            "\nEmail: " +
+            email +
+            "\nQuery Message: " +
+            query_message +
+            "\nContact Number: " +
+            contact_number
+        );
 
-        <label for="contact-number">Contact Number:</label>
-        <input
-          type="tel"
-          id="contact"
-          name="contact-number"
-          pattern="[0-9]{10}"
-          placeholder="e.g., 1234567890"
-          required
-        />
+        const data = { name, email, query_message, contact_number };
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-
-    <script>
-      function validateForm(event) {
         try {
-          var name = document.getElementById("name").value;
-          var email = document.getElementById("email").value;
-          var query_message = document.getElementById("query").value;
-          var contact_number = document.getElementById("contact").value;
+          const response = await fetch("http://localhost:5500/api/contact-us", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
 
-          alert(
-            "Information received: " +
-              "\nName: " +
-              name +
-              "\nEmail: " +
-              email +
-              "\nQuery Message: " +
-              query_message +
-              "\nContact Number: " +
-              contact_number
-          );
-
-          document.getElementById("name").value = "";
-          document.getElementById("email").value = "";
-          document.getElementById("query").value = "";
-          document.getElementById("contact").value = "";
-          event.preventDefault();
-          return true;
+          const responseData = await response.json();
+          if (responseData) {
+            alert("Response received at backend");
+            console.log("Response Data: ",responseData);
+          }
+          console.log(responseData);
         } catch (error) {
-          console.log("Some error occured , refresh the page");
-          return false;
+          console.log(error);
         }
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("query").value = "";
+        document.getElementById("number").value = "";
+        return true;
       }
-    </script>
-  </body>
+     </script>
+</body>
 </html>
