@@ -5,6 +5,26 @@
     align-items: center;
     /* margin: auto auto; */
 
+/* navigation bar */
+.bar{
+    color: black;
+    font-size: 25px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100vw;
+    z-index: 10;
+}
+
+.list{
+    color: #a9a9a9;
+    font-size: 20px;
+    cursor: pointer;
+}
+.list a:hover{
+    color: rgb(77, 76, 76);
+}
+/* navigation bar */
 .newsletter-holder{
     display: flex;
     justify-content: center;
