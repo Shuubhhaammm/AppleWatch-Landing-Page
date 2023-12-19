@@ -2,6 +2,7 @@ const cors = require("cors");
 const express = require("express");
 require("./lib/mongoose.js");
 const ContactFormSchema = require("./lib/ContactFormSchema.js");
+const NewUserSchema = require("./lib/NewUserSchema.js");
 const app = express();
 const PORT = 5500;
 app.use(cors());
@@ -27,6 +28,26 @@ app.post("/api/contact-us",async(req,res) => {
         return res.json({
             message: "Error at server",
             status: 500,
+        })
+    }
+})
+
+app.post("/api/register",async(req,res) => {
+    try {
+        const {name,email,password} = await req.body;
+        console.log("Register request for :" , {name,email});
+        const newUser = await NewUserSchema.create({name,email,password});
+        await newUser.save();
+        return res.json({
+            message: "New User created",
+            status: 201,
+            user: newUser
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.json({
+            message: "Some error occured while registering user",
+            status: 405
         })
     }
 })
