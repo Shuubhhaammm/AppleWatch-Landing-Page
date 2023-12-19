@@ -1,55 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="contact_styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="contact_styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Contact Us</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="newsletter-holder">
-        
-        <div class="newsletter w-full flex flex-wrap justify-around items-center">
-    
-         <div class="greeting w-[45%]">
-             <h1 class="text-[35px]">Contact Us</h1>
-             <p class="text-[50px]"><b>Have questions?<br>Shoot us an email.</b></p>
-             <br>
-             <p class="text-[18px]"><b>Have a question for us or feedback? Please click 
-                 on the most appropriate category amd fill out the form to reach us.</b></p>
-         </div>
-             
-         <div class="details w-[45%]">
-             <form id="contact" action="" onsubmit="event.preventDefault();validateForm()">
-                 <fieldset>
-                     <input id="name" placeholder="Your name" type="text" tabindex="1" required autofocus>
-                   </fieldset>
-    
-                   <fieldset>
-                     <input id="email" placeholder="Your Email Address" type="email" tabindex="2" required>
-                   </fieldset>
-    
-                   <fieldset>
-                     <input id="number" placeholder="Your Phone Number" type="tel" tabindex="3" required>
-                   </fieldset>
-                   
-                   <fieldset>
-                     <textarea id="query" placeholder="Type your Message Here...." tabindex="5" required></textarea>
-                   </fieldset>
-    
-                   <fieldset>
-    
-                     <button name="submit" type="submit" id="contact-submit" data-submit="...Sending" >Submit</button>
-                   </fieldset>
-             </form>                                        
-         </div>
-         </div>
-    
-     </div>
+      <div class="newsletter w-full flex flex-wrap justify-around items-center">
+        <div class="greeting w-[45%]">
+          <h1 class="text-[35px]">Contact Us</h1>
+          <p class="text-[50px]">
+            <b>Have questions?<br />Shoot us an email.</b>
+          </p>
+          <br />
+          <p class="text-[18px]">
+            <b
+              >Have a question for us or feedback? Please click on the most
+              appropriate category and fill out the form to reach us.</b
+            >
+          </p>
+        </div>
 
-     <script>
-        async function validateForm() {
+        <div class="details w-[45%]">
+          <form
+            id="contact"
+            action=""
+            onsubmit="event.preventDefault();validateForm()"
+          >
+            <fieldset>
+              <input
+                id="name"
+                placeholder="Your name"
+                type="text"
+                tabindex="1"
+                required
+                autofocus
+              />
+            </fieldset>
+
+            <fieldset>
+              <input
+                id="email"
+                placeholder="Your Email Address"
+                type="email"
+                tabindex="2"
+                required
+              />
+            </fieldset>
+
+            <fieldset>
+              <input
+                id="number"
+                placeholder="Your Phone Number"
+                type="tel"
+                tabindex="3"
+                required
+              />
+            </fieldset>
+
+            <fieldset>
+              <textarea
+                id="query"
+                placeholder="Type your Message Here...."
+                tabindex="5"
+                required
+              ></textarea>
+            </fieldset>
+
+            <fieldset>
+              <button
+                name="submit"
+                type="submit"
+                id="contact-submit"
+                data-submit="...Sending"
+              >
+                Submit
+              </button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function validateForm() {
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
         var query_message = document.getElementById("query").value;
@@ -77,22 +114,17 @@
             },
             body: JSON.stringify(data),
           });
-
-          const responseData = await response.json();
-          if (responseData) {
-            alert("Response received at backend");
-            console.log("Response Data: ",responseData);
-          }
-          console.log(responseData);
         } catch (error) {
           console.log(error);
+        } finally {
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("query").value = "";
+          document.getElementById("number").value = "";
         }
-        document.getElementById("name").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("query").value = "";
-        document.getElementById("number").value = "";
+
         return true;
       }
-     </script>
-</body>
+    </script>
+  </body>
 </html>

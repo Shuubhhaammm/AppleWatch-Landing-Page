@@ -99,16 +99,14 @@
             body: JSON.stringify(data),
           });
 
-          const responseData = await response.json();
-          if (responseData) {
-            alert("Response received at backend");
-            console.log("Response Data: ", responseData);
-          }
-          console.log(responseData);
-          return true;
         } catch (error) {
           console.log("Error: ",error.message);
           return false;
+        }finally{
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("confirm_password").value = "";
         }
       }
     </script>
