@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const jwt = require("jsonwebtoken");
 require("./lib/mongoose.js");
 const ContactFormSchema = require("./lib/ContactFormSchema.js");
 const NewUserSchema = require("./lib/NewUserSchema.js");
@@ -11,6 +12,14 @@ app.use(express.json());
 app.get("/",(req,res) => {
     console.log("GET REQUEST AT HOME");
 })
+
+function checkAuthToken(req,res,next){
+    const authToken = req.headers.authorization;
+    if(authToken){
+        return res.redirect("/");
+    }
+    next();
+}
 
 app.post("/api/contact-us",async(req,res) => {
     try {
@@ -32,7 +41,7 @@ app.post("/api/contact-us",async(req,res) => {
     }
 })
 
-app.post("/api/register",async(req,res) => {
+app.post("/api/register",checkAuthToken,async(req,res) => {
     try {
         const {name,email,password} = await req.body;
         console.log("Register request for :" , {name,email});
@@ -50,6 +59,37 @@ app.post("/api/register",async(req,res) => {
             status: 405
         })
     }
+})
+
+app.post("/api/check-credentials",checkAuthToken,async(req,res) => {
+    const {email,password} = await req.body;
+    console.log("Login Request: ",{email,password});
+    const existingUser = await NewUserSchema.findOne({email:email});
+    if(!existingUser){
+        console.log("User Not Found");
+        return res.json({
+            message: "User not found",
+            status: 404,
+        })
+    }
+
+    const user_password = existingUser.password;
+    if(user_password !== password){
+        console.log("Invalid Password");
+        return res.json({
+            message: "Invalid credentials",
+            status: 401
+        })
+    }
+
+    console.log("Password match");
+    const token = jwt.sign({userId: existingUser._id},'your-secret-key',{expiresIn:'1h'});
+    return res.json({
+        message: "Login Successfull",
+        status: 200,
+        token: token,
+    })
+
 })
 
 app.listen(PORT,() => {
